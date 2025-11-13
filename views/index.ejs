@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Welcome to the EJS Template</h1>
+    <p><%= nombre %></p>
+    <% console.log("Hola desde EJS") %>
+    <ul>
+      <% for (const tecnologia of tecnologias) { %>
+      <li><%= tecnologia %></li>
+      <% } %>
+    </ul>
+  </body>
+</html>
