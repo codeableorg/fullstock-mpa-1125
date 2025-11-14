@@ -2,21 +2,40 @@ import express from "express";
 
 const app = express();
 
-// Static file serving middleware
+// Middleware para servir archivos estáticos
 app.use(express.static("public"));
 
+// Configura EJS como motor de plantillas
 app.set("view engine", "ejs");
 
-// Routes
+// Rutas
 app.get("/", (req, res) => {
-  res.render("index.ejs", {
-    nombre: "Codeable",
-    tecnologias: ["HTML", "CSS", "JS"],
-  });
+  res.render("home");
 });
 
-app.use((req, res, next) => {
-  res.status(404).sendFile("404.html", { root: "public" });
+app.get("/category", (req, res) => {
+  res.render("category");
+});
+
+app.get("/product", (req, res) => {
+  res.render("product");
+});
+
+app.get("/cart", (req, res) => {
+  res.render("cart");
+});
+
+app.get("/checkout", (req, res) => {
+  res.render("checkout");
+});
+
+app.get("/order-confirmation", (req, res) => {
+  res.render("order-confirmation");
+});
+
+// Manejador de rutas no encontradas
+app.use((req, res) => {
+  res.status(404).render("404");
 });
 
 app.listen(3000, () => {
