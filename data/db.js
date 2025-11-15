@@ -395,6 +395,41 @@ export const db = {
       ],
     },
   ],
-  carts: [],
+  cart: {
+    total: 0,
+    totalQuantity: 0,
+    items: [],
+  },
   orders: [],
 };
+
+/*
+Carrito de ejemplo:
+
+cart: {
+    total: 54.99,
+    totalQuantity: 3,
+    items: [
+      {
+        product: {
+          id: 1,
+          title: "Polo React",
+          imgSrc: "/images/polos/polo-react.png",
+          price: 20,
+        },
+        quantity: 2,
+        subtotal: 40,
+      },
+      {
+        product: {
+          id: 23,
+          title: "Taza GitHub",
+          imgSrc: "/images/tazas/taza-github.png",
+          price: 14.99,
+        },
+        quantity: 1,
+        subtotal: 14.99,
+      },
+    ],
+  }
+*/

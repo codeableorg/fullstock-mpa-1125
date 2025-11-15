@@ -3,6 +3,16 @@ import layoutMiddleware from "express-ejs-layouts";
 
 import { db } from "./data/db.js";
 
+function globalDataMiddleware(req, res, next) {
+  res.locals.categories = db.categories;
+  res.locals.cart = db.cart;
+  next();
+}
+
+function notFoundMiddleware(req, res) {
+  res.status(404).render("404");
+}
+
 const app = express();
 
 // Middleware para servir archivos estáticos
@@ -12,10 +22,8 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(layoutMiddleware);
 
-app.use((req, res, next) => {
-  res.locals.categories = db.categories;
-  next();
-});
+// Middleware de datos globales
+app.use(globalDataMiddleware);
 
 // Rutas
 app.get("/", (req, res) => {
@@ -69,8 +77,13 @@ app.get("/stickers", (req, res) => {
   });
 });
 
-app.get("/product", (req, res) => {
-  res.render("product");
+app.get("/products/:id", (req, res) => {
+  // Convertir el id del producto a número
+  const id = Number(req.params.id);
+  // Buscar el producto por su id
+  const product = db.products.find((product) => product.id === id);
+
+  res.render("product", { product });
 });
 
 app.get("/cart", (req, res) => {
@@ -86,9 +99,7 @@ app.get("/order-confirmation", (req, res) => {
 });
 
 // Manejador de rutas no encontradas
-app.use((req, res) => {
-  res.status(404).render("404");
-});
+app.use(notFoundMiddleware);
 
 app.listen(3000, () => {
   console.log(`Server is running on http://localhost:3000`);
