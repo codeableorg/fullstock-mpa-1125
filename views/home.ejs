@@ -23,42 +23,17 @@
       </p>
     </div>
     <div class="categories__grid">
-      <a href="category" class="category">
+      <% for(const category of categories) { %>
+      <a href="<%= category.slug %>" class="category">
         <div class="category__image">
-          <img src="/images/polos.jpg" alt="Polos" />
+          <img src="<%= category.imgSrc %>" alt="<%= category.alt %>" />
         </div>
         <div>
-          <h3 class="category__title">Polos</h3>
-          <p class="category__description">
-            Polos exclusivos con diseños que todo desarrollador querrá lucir.
-            Ideales para llevar el código a donde vayas.
-          </p>
+          <h3 class="category__title"><%= category.title %></h3>
+          <p class="category__description"><%= category.description %></p>
         </div>
       </a>
-      <a href="category" class="category">
-        <div class="category__image">
-          <img src="/images/tazas.jpg" alt="Tazas" />
-        </div>
-        <div>
-          <h3 class="category__title">Tazas</h3>
-          <p class="category__description">
-            Tazas que combinan perfectamente con tu café matutino y tu pasión
-            por la programación. ¡Empieza el día con estilo!
-          </p>
-        </div>
-      </a>
-      <a href="category" class="category">
-        <div class="category__image">
-          <img src="/images/stickers.jpg" alt="Stickers" />
-        </div>
-        <div>
-          <h3 class="category__title">Stickers</h3>
-          <p class="category__description">
-            Personaliza tu espacio de trabajo con nuestros stickers únicos y
-            muestra tu amor por el desarrollo web.
-          </p>
-        </div>
-      </a>
+      <% } %>
     </div>
   </div>
 </section>

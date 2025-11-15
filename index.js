@@ -1,6 +1,8 @@
 import express from "express";
 import layoutMiddleware from "express-ejs-layouts";
 
+import { db } from "./data/db.js";
+
 const app = express();
 
 // Middleware para servir archivos estáticos
@@ -10,13 +12,61 @@ app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(layoutMiddleware);
 
+app.use((req, res, next) => {
+  res.locals.categories = db.categories;
+  next();
+});
+
 // Rutas
 app.get("/", (req, res) => {
   res.render("home");
 });
 
-app.get("/category", (req, res) => {
-  res.render("category");
+app.get("/polos", (req, res) => {
+  // Obtener la categoría de polos desde la base de datos
+  const category = db.categories.find((category) => category.slug === "polos");
+
+  // Obtener los productos de la categoría de polos
+  const products = db.products.filter(
+    (product) => product.categoryId === category.id
+  );
+
+  res.render("category", {
+    category,
+    products,
+  });
+});
+
+app.get("/tazas", (req, res) => {
+  // Obtener la categoría de tazas desde la base de datos
+  const category = db.categories.find((category) => category.slug === "tazas");
+
+  // Obtener los productos de la categoría de tazas
+  const products = db.products.filter(
+    (product) => product.categoryId === category.id
+  );
+
+  res.render("category", {
+    category,
+    products,
+  });
+});
+
+app.get("/stickers", (req, res) => {
+  // Obtener la categoría de stickers desde la base de datos
+  const category = db.categories.find(
+    (category) => category.slug === "stickers"
+  );
+
+  // Obtener los productos de la categoría de stickers
+  const products = db.products.filter(
+    (product) => product.categoryId === category.id
+  );
+
+  res.render("category", {
+    category,
+    products,
+  });
 });
 
 app.get("/product", (req, res) => {
