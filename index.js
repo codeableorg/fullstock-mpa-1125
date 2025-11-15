@@ -1,4 +1,5 @@
 import express from "express";
+import layoutMiddleware from "express-ejs-layouts";
 
 const app = express();
 
@@ -7,6 +8,7 @@ app.use(express.static("public"));
 
 // Configura EJS como motor de plantillas
 app.set("view engine", "ejs");
+app.use(layoutMiddleware);
 
 // Rutas
 app.get("/", (req, res) => {
