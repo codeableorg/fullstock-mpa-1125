@@ -18,6 +18,9 @@ const app = express();
 // Middleware para servir archivos estáticos
 app.use(express.static("public"));
 
+// Middleware para procesar la data de formularios
+app.use(express.urlencoded());
+
 // Configura EJS como motor de plantillas
 app.set("view engine", "ejs");
 app.use(layoutMiddleware);
@@ -30,43 +33,19 @@ app.get("/", (req, res) => {
   res.render("home");
 });
 
-app.get("/polos", (req, res) => {
-  // Obtener la categoría de polos desde la base de datos
-  const category = db.categories.find((category) => category.slug === "polos");
+app.get("/:categorySlug", (req, res, next) => {
+  const categorySlug = req.params.categorySlug;
 
-  // Obtener los productos de la categoría de polos
-  const products = db.products.filter(
-    (product) => product.categoryId === category.id
-  );
-
-  res.render("category", {
-    category,
-    products,
-  });
-});
-
-app.get("/tazas", (req, res) => {
-  // Obtener la categoría de tazas desde la base de datos
-  const category = db.categories.find((category) => category.slug === "tazas");
-
-  // Obtener los productos de la categoría de tazas
-  const products = db.products.filter(
-    (product) => product.categoryId === category.id
-  );
-
-  res.render("category", {
-    category,
-    products,
-  });
-});
-
-app.get("/stickers", (req, res) => {
-  // Obtener la categoría de stickers desde la base de datos
+  // Obtener la categoría desde la base de datos
   const category = db.categories.find(
-    (category) => category.slug === "stickers"
+    (category) => category.slug === categorySlug
   );
 
-  // Obtener los productos de la categoría de stickers
+  if (!category) {
+    return next();
+  }
+
+  // Obtener los productos de la categoría
   const products = db.products.filter(
     (product) => product.categoryId === category.id
   );
@@ -84,6 +63,42 @@ app.get("/products/:id", (req, res) => {
   const product = db.products.find((product) => product.id === id);
 
   res.render("product", { product });
+});
+
+app.post("/cart/add", (req, res, next) => {
+  const productId = Number(req.body.productId);
+
+  const product = db.products.find((product) => product.id === productId);
+
+  // El producto esta en carrito?
+  const cartItem = db.cart.items.find((item) => item.product.id === product.id);
+
+  // Si sí está, añadir 1 a la cantidad actual
+  if (cartItem) {
+    cartItem.quantity += 1;
+    cartItem.subtotal += product.price;
+  } else {
+    // Si no está, crear y añadir el Item para este producto
+    const newItem = {
+      product: {
+        id: product.id,
+        title: product.title,
+        imgSrc: product.imgSrc,
+        price: product.price,
+      },
+      quantity: 1,
+      subtotal: product.price,
+    };
+    db.cart.items.push(newItem);
+  }
+
+  db.cart.total += product.price;
+  db.cart.totalQuantity += 1;
+
+  // res.redirect("/products/" + product.id);
+
+  // Redirigir a la URL que nos hizo la petición
+  res.redirect(req.get("Referer"));
 });
 
 app.get("/cart", (req, res) => {
