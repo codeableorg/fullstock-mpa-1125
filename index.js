@@ -131,6 +131,9 @@ app.post("/cart/update-item", (req, res) => {
   item.quantity += deltaQuantity;
   item.subtotal += deltaSubTotal;
 
+  // si item.quantity === 0, eliminar el item
+  // ESTO HACE QUE REPITAMOS LA LOGICA!!!
+
   cart.totalQuantity += deltaQuantity;
   cart.total += deltaSubTotal;
 

@@ -27,16 +27,23 @@
           <div class="cart__item-footer">
             <p class="cart__item-price">S/ <%= item.product.price %></p>
             <div class="cart__item-quantity">
-              <form method="post" action="/cart/update-item">
+              <form 
+                method="post"
+                action="<%= item.quantity > 1 ? '/cart/update-item' : '/cart/delete-item' %>"
+              >
                 <input name="productId" value="<%= item.product.id %>" hidden />
+                <% if (item.quantity > 1) { %>
                 <input
                   name="quantity"
                   value="<%= item.quantity - 1 %>"
                   hidden
                 />
+                <% } %>
                 <button
                   class="button button--sm-icon button--outline"
                   aria-label="Reducir cantidad"
+                  <% // Opción que deshabilita el botón si la cantidad es 1 %>
+                  <%= // item.quantity === 1 ? "disabled" : "" %>
                 >
                   <img src="/images/icons/minus.svg" alt="Reducir cantidad" />
                 </button>
