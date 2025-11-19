@@ -14,7 +14,8 @@
         <div class="cart__item-details">
           <div class="cart__item-header">
             <h2 class="cart__item-title"><%= item.product.title %></h2>
-            <form>
+            <form method="post" action="/cart/delete-item">
+              <input name="productId" value="<%= item.product.id %>" hidden />
               <button
                 class="button button--sm-icon button--outline"
                 aria-label="Eliminar artículo"
@@ -26,7 +27,13 @@
           <div class="cart__item-footer">
             <p class="cart__item-price">S/ <%= item.product.price %></p>
             <div class="cart__item-quantity">
-              <form>
+              <form method="post" action="/cart/update-item">
+                <input name="productId" value="<%= item.product.id %>" hidden />
+                <input
+                  name="quantity"
+                  value="<%= item.quantity - 1 %>"
+                  hidden
+                />
                 <button
                   class="button button--sm-icon button--outline"
                   aria-label="Reducir cantidad"
@@ -37,7 +44,13 @@
               <span class="cart__item-quantity-display"
                 ><%= item.quantity %></span
               >
-              <form>
+              <form method="post" action="/cart/update-item">
+                <input name="productId" value="<%= item.product.id %>" hidden />
+                <input
+                  name="quantity"
+                  value="<%= item.quantity + 1 %>"
+                  hidden
+                />
                 <button
                   class="button button--sm-icon button--outline"
                   aria-label="Aumentar cantidad"

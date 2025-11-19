@@ -18,7 +18,7 @@ const app = express();
 // Middleware para servir archivos estáticos
 app.use(express.static("public"));
 
-// Middleware para procesar la data de formularios
+// Middleware para procesar la data de formularios y almacenarlo en req.body
 app.use(express.urlencoded());
 
 // Configura EJS como motor de plantillas
@@ -99,6 +99,42 @@ app.post("/cart/add", (req, res, next) => {
 
   // Redirigir a la URL que nos hizo la petición
   res.redirect(req.get("Referer"));
+});
+
+app.post("/cart/delete-item", (req, res) => {
+  const productId = Number(req.body.productId);
+
+  const cart = db.cart;
+
+  const index = cart.items.findIndex((item) => item.product.id === productId);
+  const item = cart.items[index];
+
+  cart.total -= item.subtotal;
+  cart.totalQuantity -= item.quantity;
+
+  cart.items.splice(index, 1);
+
+  res.redirect("/cart");
+});
+
+app.post("/cart/update-item", (req, res) => {
+  const productId = Number(req.body.productId);
+  const quantity = Number(req.body.quantity);
+
+  const cart = db.cart;
+
+  const item = cart.items.find((item) => item.product.id === productId);
+
+  const deltaQuantity = quantity - item.quantity;
+  const deltaSubTotal = deltaQuantity * item.product.price;
+
+  item.quantity += deltaQuantity;
+  item.subtotal += deltaSubTotal;
+
+  cart.totalQuantity += deltaQuantity;
+  cart.total += deltaSubTotal;
+
+  res.redirect("/cart");
 });
 
 app.get("/cart", (req, res) => {
