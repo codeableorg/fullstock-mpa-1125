@@ -1,11 +1,38 @@
 import express from "express";
+import cookiesMiddleware from "cookie-parser";
 import layoutMiddleware from "express-ejs-layouts";
 
 import { db } from "./data/db.js";
 
 function globalDataMiddleware(req, res, next) {
   res.locals.categories = db.categories;
-  res.locals.cart = db.cart;
+
+  const cartId = Number(req.cookies.cartId);
+
+  const emptyCart = {
+    id: Math.random() * 10 ** 17,
+    total: 0,
+    totalQuantity: 0,
+    items: [],
+  };
+
+  let cart;
+
+  if (!cartId) {
+    cart = emptyCart;
+
+    db.carts.push(cart);
+    res.cookie("cartId", cart.id);
+  } else {
+    cart = db.carts.find((cart) => cart.id === cartId);
+
+    if (!cart) {
+      cart = emptyCart;
+      res.cookie("cartId", cart.id);
+    }
+  }
+
+  res.locals.cart = cart;
   next();
 }
 
@@ -20,6 +47,9 @@ app.use(express.static("public"));
 
 // Middleware para procesar la data de formularios y almacenarlo en req.body
 app.use(express.urlencoded());
+
+// Middleware para parsear las cookies y almacenarlo en req.cookies
+app.use(cookiesMiddleware());
 
 // Configura EJS como motor de plantillas
 app.set("view engine", "ejs");
@@ -65,13 +95,15 @@ app.get("/products/:id", (req, res) => {
   res.render("product", { product });
 });
 
-app.post("/cart/add", (req, res, next) => {
+app.post("/cart/add", (req, res) => {
   const productId = Number(req.body.productId);
 
   const product = db.products.find((product) => product.id === productId);
 
   // El producto esta en carrito?
-  const cartItem = db.cart.items.find((item) => item.product.id === product.id);
+  const cartItem = res.locals.cart.items.find(
+    (item) => item.product.id === product.id
+  );
 
   // Si sí está, añadir 1 a la cantidad actual
   if (cartItem) {
@@ -89,11 +121,11 @@ app.post("/cart/add", (req, res, next) => {
       quantity: 1,
       subtotal: product.price,
     };
-    db.cart.items.push(newItem);
+    res.locals.cart.items.push(newItem);
   }
 
-  db.cart.total += product.price;
-  db.cart.totalQuantity += 1;
+  res.locals.cart.total += product.price;
+  res.locals.cart.totalQuantity += 1;
 
   // res.redirect("/products/" + product.id);
 
@@ -104,7 +136,7 @@ app.post("/cart/add", (req, res, next) => {
 app.post("/cart/delete-item", (req, res) => {
   const productId = Number(req.body.productId);
 
-  const cart = db.cart;
+  const cart = res.locals.cart;
 
   const index = cart.items.findIndex((item) => item.product.id === productId);
   const item = cart.items[index];
@@ -121,7 +153,7 @@ app.post("/cart/update-item", (req, res) => {
   const productId = Number(req.body.productId);
   const quantity = Number(req.body.quantity);
 
-  const cart = db.cart;
+  const cart = res.locals.cart;
 
   const item = cart.items.find((item) => item.product.id === productId);
 
@@ -130,9 +162,6 @@ app.post("/cart/update-item", (req, res) => {
 
   item.quantity += deltaQuantity;
   item.subtotal += deltaSubTotal;
-
-  // si item.quantity === 0, eliminar el item
-  // ESTO HACE QUE REPITAMOS LA LOGICA!!!
 
   cart.totalQuantity += deltaQuantity;
   cart.total += deltaSubTotal;
@@ -149,7 +178,44 @@ app.get("/checkout", (req, res) => {
 });
 
 app.get("/order-confirmation", (req, res) => {
-  res.render("order-confirmation");
+  const orderId = req.query.orderId;
+  res.render("order-confirmation", { orderId });
+});
+
+app.post("/orders/create", (req, res) => {
+  const { email, ...shippingInfo } = req.body;
+
+  const cart = res.locals.cart;
+
+  const newOrder = {
+    id: Math.random() * 10 ** 17,
+    email,
+    orderDetails: cart,
+    shippingInfo,
+  };
+
+  db.orders.push(newOrder);
+
+  cart.total = 0;
+  cart.totalQuantity = 0;
+  cart.items = [];
+
+  res.redirect("/order-confirmation?orderId=" + newOrder.id);
+});
+
+// EJEMPLO PARA COOKIE:
+app.get("/set-cookie", (req, res) => {
+  res.cookie("test", "123");
+
+  res.send("<p>Cookie seteada<p>");
+});
+
+app.get("/get-cookie", (req, res) => {
+  // Leer la cookie
+  const cookies = req.cookies;
+
+  // Responder al cliente con la cookie en HTML
+  res.send(`<p>Cookies: ${JSON.stringify(cookies)}<p>`);
 });
 
 // Manejador de rutas no encontradas
