@@ -1,3 +1,5 @@
+import { readDb, writeDb } from "../data/db.js";
+
 export function renderCart(req, res) {
   res.render("cart");
 }

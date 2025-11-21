@@ -1,3 +1,5 @@
+import { readDb, writeDb } from "../data/db.js";
+
 export async function globalDataMiddleware(req, res, next) {
   const db = await readDb();
   res.locals.categories = db.categories;

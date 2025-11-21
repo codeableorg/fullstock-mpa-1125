@@ -1,3 +1,5 @@
+import { readDb } from "../data/db.js";
+
 export async function renderProduct(req, res) {
   const db = await readDb();
   // Convertir el id del producto a número
