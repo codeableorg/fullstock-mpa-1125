@@ -1,11 +1,11 @@
-import { readDb } from "../data/db.js";
+import * as productsService from "../services/productsService.js";
 
 export async function renderProduct(req, res) {
-  const db = await readDb();
-  // Convertir el id del producto a número
+  // Obtiene id de producto de los parametros de ruta y lo convierte a number
   const id = Number(req.params.id);
+
   // Buscar el producto por su id
-  const product = db.products.find((product) => product.id === id);
+  const product = await productsService.getProductById(id);
 
   res.render("product", { product });
 }

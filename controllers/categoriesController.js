@@ -1,23 +1,19 @@
-import { readDb } from "../data/db.js";
+import * as categoriesService from "../services/categoriesService.js";
+import * as productsService from "../services/productsService.js";
 
 export async function renderCategory(req, res, next) {
-  const db = await readDb();
-
+  // Leyendo el categorySlug desde los parametros de ruta
   const categorySlug = req.params.categorySlug;
 
-  // Obtener la categoría desde la base de datos
-  const category = db.categories.find(
-    (category) => category.slug === categorySlug
-  );
+  // Obtener la categoría por el slug
+  const category = await categoriesService.getCategoryBySlug(categorySlug);
 
   if (!category) {
     return next();
   }
 
   // Obtener los productos de la categoría
-  const products = db.products.filter(
-    (product) => product.categoryId === category.id
-  );
+  const products = await productsService.getProductsByCategoryId(category.id);
 
   res.render("category", {
     category,

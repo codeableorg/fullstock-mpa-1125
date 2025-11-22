@@ -1,4 +1,4 @@
-import { readDb, writeDb } from "../data/db.js";
+import * as ordersService from "../services/ordersService.js";
 
 export function renderCheckout(req, res) {
   res.render("checkout");
@@ -13,23 +13,12 @@ export function renderOrderConfirmation(req, res) {
 }
 
 export async function createOrder(req, res) {
-  const db = await readDb();
-  const cartId = res.locals.cart.id;
-  const cart = db.carts.find((cart) => cart.id === cartId);
-
+  const cartId = Number(req.cookies.cartId);
   const { email, ...shippingInfo } = req.body;
 
-  const newOrder = {
-    id: Math.random() * 10 ** 17,
-    email,
-    orderDetails: cart,
-    shippingInfo,
-  };
-
-  db.orders.push(newOrder);
-  await writeDb(db);
+  const order = await ordersService.createOrder(cartId, email, shippingInfo);
 
   res.cookie("cartId", undefined, { maxAge: 0 });
 
-  res.redirect("/order-confirmation?orderId=" + newOrder.id);
+  res.redirect("/order-confirmation?orderId=" + order.id);
 }

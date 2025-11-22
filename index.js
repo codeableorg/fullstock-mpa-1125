@@ -4,12 +4,7 @@ import layoutMiddleware from "express-ejs-layouts";
 
 import { globalDataMiddleware } from "./middlewares/globalDataMiddleware.js";
 import { notFoundMiddleware } from "./middlewares/notFoundMiddleware.js";
-
-import * as homeController from "./controllers/homeController.js";
-import * as categoriesController from "./controllers/categoriesController.js";
-import * as productsController from "./controllers/productsController.js";
-import * as cartsController from "./controllers/cartsController.js";
-import * as ordersController from "./controllers/ordersController.js";
+import router from "./routes.js";
 
 const app = express();
 
@@ -30,26 +25,7 @@ app.use(layoutMiddleware);
 app.use(globalDataMiddleware);
 
 // Rutas
-
-// Home
-app.get("/", homeController.renderHome);
-
-// Categories
-app.get("/:categorySlug", categoriesController.renderCategory);
-
-// Products
-app.get("/products/:id", productsController.renderProduct);
-
-// Carts
-app.get("/cart", cartsController.renderCart);
-app.post("/cart/add", cartsController.addCartItem);
-app.post("/cart/delete-item", cartsController.deleteCartItem);
-app.post("/cart/update-item", cartsController.updateCartItem);
-
-// Orders
-app.get("/checkout", ordersController.renderCheckout);
-app.get("/order-confirmation", ordersController.renderOrderConfirmation);
-app.post("/orders/create", ordersController.createOrder);
+app.use(router);
 
 // Manejador de rutas no encontradas
 app.use(notFoundMiddleware);

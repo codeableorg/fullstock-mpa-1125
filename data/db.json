@@ -372,6 +372,143 @@
       ]
     }
   ],
-  "carts": [],
-  "orders": []
+  "carts": [
+    {
+      "id": 7969992504059742,
+      "total": 101.97,
+      "totalQuantity": 6,
+      "items": [
+        {
+          "product": {
+            "id": 1,
+            "title": "Polo React",
+            "imgSrc": "/images/polos/polo-react.png",
+            "price": 20
+          },
+          "quantity": 3,
+          "subtotal": 60
+        },
+        {
+          "product": {
+            "id": 19,
+            "title": "Taza React",
+            "imgSrc": "/images/tazas/taza-react.png",
+            "price": 13.99
+          },
+          "quantity": 3,
+          "subtotal": 41.97
+        }
+      ]
+    },
+    {
+      "id": 24597974080027620,
+      "total": 14.99,
+      "totalQuantity": 1,
+      "items": [
+        {
+          "product": {
+            "id": 18,
+            "title": "Taza JavaScript",
+            "imgSrc": "/images/tazas/taza-js.png",
+            "price": 14.99
+          },
+          "quantity": 1,
+          "subtotal": 14.99
+        }
+      ]
+    },
+    {
+      "id": 96965935186198510,
+      "total": 2.99,
+      "totalQuantity": 1,
+      "items": [
+        {
+          "product": {
+            "id": 10,
+            "title": "Sticker JavaScript",
+            "imgSrc": "/images/stickers/sticker-js.png",
+            "price": 2.99
+          },
+          "quantity": 1,
+          "subtotal": 2.99
+        }
+      ]
+    }
+  ],
+  "orders": [
+    {
+      "id": 24614732087681590,
+      "email": "diego@codeable.la",
+      "orderDetails": {
+        "id": 7969992504059742,
+        "total": 101.97,
+        "totalQuantity": 6,
+        "items": [
+          {
+            "product": {
+              "id": 1,
+              "title": "Polo React",
+              "imgSrc": "/images/polos/polo-react.png",
+              "price": 20
+            },
+            "quantity": 3,
+            "subtotal": 60
+          },
+          {
+            "product": {
+              "id": 19,
+              "title": "Taza React",
+              "imgSrc": "/images/tazas/taza-react.png",
+              "price": 13.99
+            },
+            "quantity": 3,
+            "subtotal": 41.97
+          }
+        ]
+      },
+      "shippingInfo": {
+        "firstName": "Testino",
+        "lastName": "Diprueba",
+        "company": "",
+        "address": "Testino Calle 1",
+        "city": "Lima",
+        "country": "PE",
+        "region": "Lima",
+        "zipCode": "15047",
+        "phone": "987523571"
+      }
+    },
+    {
+      "id": 41447970353028100,
+      "email": "diego@codeable.la",
+      "orderDetails": {
+        "id": 24597974080027620,
+        "total": 14.99,
+        "totalQuantity": 1,
+        "items": [
+          {
+            "product": {
+              "id": 18,
+              "title": "Taza JavaScript",
+              "imgSrc": "/images/tazas/taza-js.png",
+              "price": 14.99
+            },
+            "quantity": 1,
+            "subtotal": 14.99
+          }
+        ]
+      },
+      "shippingInfo": {
+        "firstName": "Testino",
+        "lastName": "Diprueba",
+        "company": "",
+        "address": "Testino Calle 1",
+        "city": "Lima",
+        "country": "PE",
+        "region": "Lima",
+        "zipCode": "15047",
+        "phone": "987523571"
+      }
+    }
+  ]
 }
