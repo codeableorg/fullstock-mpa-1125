@@ -1,10 +1,10 @@
-import { readDb, writeDb } from "../data/db.js";
+import { getNextId, readDb, writeDb } from "../db/index.js";
 
-export async function insertOrder(orderData) {
+export async function createOrder(orderData) {
   const db = await readDb();
 
   const order = {
-    id: Math.random() * 10 ** 17,
+    id: getNextId("orders"),
     ...orderData,
   };
 

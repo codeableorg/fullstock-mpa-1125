@@ -1,4 +1,4 @@
-import { readDb } from "../data/db.js";
+import { readDb } from "../db/index.js";
 
 export async function findBySlug(slug) {
   const db = await readDb();

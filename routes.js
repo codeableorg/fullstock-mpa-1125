@@ -19,7 +19,7 @@ router.get("/products/:id", productsController.renderProduct);
 
 // Carts
 router.get("/cart", cartsController.renderCart);
-router.post("/cart/add", cartsController.addCartItem);
+router.post("/cart/add-item", cartsController.addCartItem);
 router.post("/cart/delete-item", cartsController.deleteCartItem);
 router.post("/cart/update-item", cartsController.updateCartItem);
 

@@ -11,14 +11,12 @@ export async function getOrCreateCart(cartId) {
   let cart;
 
   if (!cartId) {
-    cart = cartsRepository.createCart();
+    cart = await cartsRepository.createCart();
     res.cookie("cartId", cart.id);
   } else {
-    cart = cartsRepository.findById(cartId);
-
+    cart = await cartsRepository.findById(cartId);
     if (!cart) {
-      cart = cartsRepository.createCart();
-      res.cookie("cartId", cart.id);
+      cart = await cartsRepository.createCart();
     }
   }
 

@@ -25,9 +25,11 @@
             </form>
           </div>
           <div class="cart__item-footer">
-            <p class="cart__item-price">S/ <%= item.product.price %></p>
+            <p class="cart__item-price">
+              <%= formatPrice(item.product.price) %>
+            </p>
             <div class="cart__item-quantity">
-              <form 
+              <form
                 method="post"
                 action="<%= item.quantity > 1 ? '/cart/update-item' : '/cart/delete-item' %>"
               >
@@ -42,8 +44,6 @@
                 <button
                   class="button button--sm-icon button--outline"
                   aria-label="Reducir cantidad"
-                  <% // Opción que deshabilita el botón si la cantidad es 1 %>
-                  <%= // item.quantity === 1 ? "disabled" : "" %>
                 >
                   <img src="/images/icons/minus.svg" alt="Reducir cantidad" />
                 </button>
@@ -72,7 +72,7 @@
       <% } %>
       <div class="cart__total">
         <p>Total</p>
-        <p>S/ <%= cart.total %></p>
+        <p><%= formatPrice(cart.total) %></p>
       </div>
       <div class="cart__action">
         <% if(cart.items.length > 0) { %>

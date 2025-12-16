@@ -1,4 +1,4 @@
-import { readDb, writeDb } from "../data/db.js";
+import { getNextId, readDb, writeDb } from "../db/index.js";
 
 export async function findById(id) {
   const db = await readDb();
@@ -22,7 +22,7 @@ export async function createCart() {
   const db = await readDb();
 
   const newCart = {
-    id: Math.random() * 10 ** 17,
+    id: getNextId("carts"),
     total: 0,
     totalQuantity: 0,
     items: [],

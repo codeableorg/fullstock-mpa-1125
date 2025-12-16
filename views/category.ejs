@@ -59,7 +59,9 @@
               <p class="product-card__description">
                 <%= product.description %>
               </p>
-              <p class="product-card__price">S/ <%= product.price %></p>
+              <p class="product-card__price">
+                <%= formatPrice(product.price) %>
+              </p>
             </div>
           </div>
         </a>

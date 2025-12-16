@@ -1,4 +1,4 @@
-import { readDb, writeDb } from "../data/db.js";
+import { readDb, writeDb } from "../db/index.js";
 import * as cartsService from "../services/cartsService.js";
 
 export function renderCart(req, res) {
